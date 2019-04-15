@@ -1,0 +1,94 @@
+<ion-header translucent="true">
+  <ion-toolbar>
+    <ion-title>Informe o KC</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dimissModal()">Fechar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <form [formGroup]="kcForm">
+    
+    <ion-item>
+
+      <ion-label>Inserir nova cultura(Kc)</ion-label>
+      <ion-checkbox color="primary" (ionChange)="newCulture($event)"></ion-checkbox>
+
+    </ion-item>
+    
+    <ion-item>
+      <ion-label class="label-custom" position="floating">
+        <ion-icon name="mail"></ion-icon>Cultura
+      </ion-label>
+      <ion-select formControlName="culture_id" cancelText="Cancelar" okText="Selecionar">
+        <ion-select-option *ngFor="let data of culturas" [value]="data.id">{{data.descricao}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label class="label-custom" position="floating">
+        <ion-icon name="mail"></ion-icon>Informe o estágio
+      </ion-label>
+      <ion-select formControlName="stage_id" cancelText="Cancelar" okText="Selecionar">
+        <ion-select-option *ngFor="let data of estagios" [value]="data.id">{{data.descricao}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-list>
+      <ion-radio-group formControlName="umidade_maior_setenta">
+        <ion-list-header>
+          <ion-label>Umidade</ion-label>
+        </ion-list-header>
+
+        <ion-item>
+          <ion-label>sob alta umidade (URmín > 70%)</ion-label>
+          <ion-radio slot="start" value="1"></ion-radio>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>sob baixa umidade (URmín < 20%)</ion-label>
+          <ion-radio slot="start" value="0"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+    </ion-list>      
+      
+    <ion-item *ngIf="new">
+      <ion-label class="label-custom" position="floating">
+        <ion-icon name="mail"></ion-icon>KC
+      </ion-label>
+      <ion-input formControlName="kc" type="number"></ion-input>
+    </ion-item>
+    
+    <ion-list *ngIf="dataKc.length">
+      <ion-radio-group formControlName="kc_value">
+        <ion-list-header>
+          <ion-label>KC</ion-label>
+        </ion-list-header>
+
+        <ion-item *ngFor="let data of dataKc">
+          <ion-label>{{data.kc}}</ion-label>
+          <ion-radio slot="start" [value]="data.kc"></ion-radio>
+        </ion-item>
+        
+      </ion-radio-group>
+    </ion-list>
+
+    <ion-button type="button" (click)="readDataValueKc()" [disabled]="kcForm.invalid" *ngIf="!new">Consultar</ion-button>
+
+  </form>
+
+</ion-content>
+
+<ion-footer translucent="true">
+  <ion-toolbar>
+    
+    <ion-buttons slot="end">
+      <ion-button type="button" size="small" color="light" (click)="dimissModal()">Cancelar</ion-button>
+      <ion-button type="button" size="small" color="primary" (click)="selecionaKc()" [disabled]="!kcForm.controls['kc_value'].value">Selecionar</ion-button>
+      <ion-button type="button" size="small" color="primary" (click)="createKc()" [disabled]="kcForm.invalid" *ngIf="new">Salvar</ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-footer>

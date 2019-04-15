@@ -1,0 +1,48 @@
+<ion-content padding>
+  <form [formGroup]="userRegisterForm" (ngSubmit)="register()">
+
+    <ion-item>
+
+      <ion-label class="label-custom" position="floating">
+        <ion-icon name="person"></ion-icon>Nome
+      </ion-label>
+      <ion-input type="text" formControlName="name" autocomplete="off"></ion-input>
+
+    </ion-item>  
+  
+    <p *ngIf="userRegisterForm.get('name').errors && userRegisterForm.get('name').touched && !userRegisterForm.get('name').value" class="error">
+      {{userRegisterForm.get('name').errors.message}}
+    </p>
+
+    <ion-item>
+
+      <ion-label class="label-custom" position="floating">
+        <ion-icon name="mail"></ion-icon>E-mail
+      </ion-label>
+      <ion-input type="email" formControlName="email" autocomplete="off"></ion-input>
+
+    </ion-item>
+
+
+    <p *ngIf="userRegisterForm.get('email').errors && userRegisterForm.get('email').touched && !userRegisterForm.get('email').value" class="error">
+      {{userRegisterForm.get('email').errors.message}}
+    </p>
+
+
+    <p *ngIf="userRegisterForm.get('email').errors && userRegisterForm.get('email').touched && userRegisterForm.get('email').value" class="error">Email inválido.</p>
+
+    <ion-item>
+      <ion-label class="label-custom" position="floating">
+        <ion-icon name="lock"></ion-icon>Senha
+      </ion-label>
+      <ion-input type="password" formControlName="password" autocomplete="off"></ion-input>
+    </ion-item>
+
+    <p *ngIf="userRegisterForm.get('password').errors && userRegisterForm.get('password').touched" class="error">
+      {{userRegisterForm.get('password').errors.message}}</p>
+
+    <ion-button type="submit" expand="block" [disabled]="userRegisterForm.invalid">Salvar</ion-button>
+    <!-- <ion-button expand="block" color="secondary" routerLink="/register" routerDirection="forward">Register</ion-button> -->
+
+  </form>
+</ion-content>

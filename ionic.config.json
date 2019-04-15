@@ -1,0 +1,7 @@
+{
+  "name": "irrigar",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
