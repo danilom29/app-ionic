@@ -1,0 +1,34 @@
+<ion-header translucent="true">
+    <ion-toolbar>
+      <ion-title>Área do vaso</ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="dimissModal()">Fechar</ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+  
+    <form [formGroup]="areaForm">  
+        
+      <ion-item>
+        <ion-label class="label-custom" position="floating">
+          <ion-icon name="mail"></ion-icon>Diametro superior do vaso(cm)
+        </ion-label>
+        <ion-input formControlName="raio" type="number"></ion-input>
+      </ion-item>
+  
+    </form>
+  
+  </ion-content>
+  
+  <ion-footer translucent="true">
+    <ion-toolbar>
+      
+      <ion-buttons slot="end">
+        <ion-button type="button" size="small" color="primary" (click)="dimissModal()">Cancelar</ion-button>
+        <ion-button type="button" size="small" color="primary" (click)="calcularArea()" [disabled]="areaForm.invalid">Calcular</ion-button>
+      </ion-buttons>
+  
+    </ion-toolbar>
+  </ion-footer>

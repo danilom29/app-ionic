@@ -50,8 +50,8 @@ export class KcPage implements OnInit {
     }
   }
 
-  readDataValueKc(){ 
-    console.log(this.kcForm.value);
+  readDataValueKc(){
+
     this.api.post('kc/value', this.kcForm.value).then((res: any) => {
       this.dataKc = res;
 
@@ -66,12 +66,19 @@ export class KcPage implements OnInit {
 
       this.api.toast(res.message, 'success', 5000);
       let data =  {
-        data: res.response.kc,
-        cultura: res.response.id
+        kc: res.kc,
+        cultura: res.id
       }
+      console.log("aqui", res)
       this.modalController.dismiss(data);
       
     }); 
+  }
+
+  selecionaKc(){
+    let data =  { kc: this.kcForm.value.kc_value, cultura: this.kcForm.value.culture_id };
+
+    this.modalController.dismiss(data);
   }
 
 }

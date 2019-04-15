@@ -7,7 +7,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 const TOKEN_KEY = 'auth-token';
 const API_STORAGE_KEY = 'specialkey';
-const API_URL = "http://159.89.229.213:7000";
+const API_URL = "http://localhost:7000";
 
 @Injectable({
   providedIn: 'root'

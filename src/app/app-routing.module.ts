@@ -8,7 +8,10 @@ const routes: Routes = [
   // { path: 'dashboard', canActivate: [AuthGuard], loadChildren: './tabs/tabs.module#TabsPageModule' }
   { path: 'tabs', canActivate: [AuthGuard], loadChildren: './tabs/tabs.module#TabsPageModule' },
   { path: 'register', loadChildren: './public/register/register.module#RegisterPageModule' },
-  { path: 'kc', loadChildren: './modal/kc/kc.module#KcPageModule' }
+  { path: 'kc', loadChildren: './modal/kc/kc.module#KcPageModule' },  { path: 'vessel-area', loadChildren: './modal/vessel-area/vessel-area.module#VesselAreaPageModule' },
+  { path: 'system-efficiency', loadChildren: './modal/system-efficiency/system-efficiency.module#SystemEfficiencyPageModule' },
+  { path: 'calc-result', loadChildren: './modal/calc-result/calc-result.module#CalcResultPageModule' }
+
 ];
 @NgModule({
   imports: [

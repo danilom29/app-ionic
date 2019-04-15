@@ -9,10 +9,10 @@
 <ion-content>
 
   <ion-button (click)="logout()" expand="block">SAIR</ion-button>
-  <ion-button (click)="get()" expand="block">user</ion-button>
+  <!-- <ion-button (click)="get()" expand="block">user</ion-button> -->
 
   <ion-slides [options]="slideOpts" #slides>
-    <ion-slide>
+    <ion-slide style="flex-direction: column;">
 
       <!-- <h1>Slide 1</h1> -->
       <form [formGroup]="calcForm">
@@ -52,7 +52,8 @@
       <ion-button (click)="next()" size="small">Proximo</ion-button>
 
     </ion-slide>
-    <ion-slide>
+    
+    <ion-slide style="flex-direction: column;">
 
       <!-- <h1>Slide 2</h1> -->
 
@@ -80,7 +81,7 @@
             <ion-icon name="crop"></ion-icon>Área do vaso(m²)
           </ion-label>
           <ion-input formControlName="area" type="number"></ion-input>
-          <!-- <mat-icon matSuffix (click)="openDialogArea()" class="modal">help_outline</mat-icon> -->
+          <ion-icon name="help-circle" (click)="openDialogArea()"></ion-icon>
         </ion-item>
 
         <ion-item>
@@ -88,12 +89,13 @@
             <ion-icon name="flower"></ion-icon>Eficiência do Sistema
           </ion-label>
           <ion-input formControlName="eficiencia" type="number"></ion-input>
-          <!-- <mat-icon matSuffix (click)="openDialogEficiencia()" class="modal">help_outline</mat-icon> -->
+          <ion-icon name="help-circle" (click)="openDialogEficiencia()"></ion-icon>
         </ion-item>
 
       </form>
 
       <ion-button (click)="prev()" size="small" color="light">Anterior</ion-button>
+      
     </ion-slide>
   </ion-slides>
 

@@ -15,10 +15,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { Network } from '@ionic-native/network/ngx';
 import { KcPage } from './modal/kc/kc.page';
 import { ReactiveFormsModule } from '@angular/forms';
+import { VesselAreaPage } from './modal/vessel-area/vessel-area.page';
+import { SystemEfficiencyPage } from './modal/system-efficiency/system-efficiency.page';
+import { CalcResultPage } from './modal/calc-result/calc-result.page';
 
 @NgModule({
-  declarations: [AppComponent, KcPage],
-  entryComponents: [KcPage],
+  declarations: [AppComponent, KcPage, VesselAreaPage, SystemEfficiencyPage, CalcResultPage],
+  entryComponents: [KcPage, VesselAreaPage, SystemEfficiencyPage, CalcResultPage],
   imports: [
     BrowserModule, 
     IonicModule.forRoot(),
@@ -34,7 +37,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     Network
   ],
-  exports: [KcPage],
+  exports: [KcPage, VesselAreaPage, SystemEfficiencyPage, CalcResultPage],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

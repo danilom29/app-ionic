@@ -1,0 +1,66 @@
+<ion-header translucent="true">
+  <ion-toolbar>
+    <ion-title>Resultado</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
+      <ion-card-title>Card Title</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      Keep close to Nature's heart... and break clear away, once in awhile,
+      and climb a mountain or spend a week in the woods. Wash your spirit clean.
+    </ion-card-content>
+  </ion-card> -->
+
+  <ion-card class="card-result">
+    <ion-card-header>
+      <ion-card-title>{{et0}} mm/dia</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content class="divider-content">
+      <p class="mt15">ETo</p>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="card-result">
+    <ion-card-header>
+      <ion-card-title>{{etc}} mm</ion-card-title>
+    </ion-card-header>
+    <ion-card-content class="divider-content">
+      <p class="mt15">ETc(Lâm Liqui)</p>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="card-result">
+    <ion-card-header>
+      <ion-card-title>{{litro_vaso*1000}} ml</ion-card-title>
+      <ion-card-subtitle>{{litro_vaso}} L</ion-card-subtitle>
+      <ion-card-subtitle>{{(litro_vaso*1000)*1.3}} ml (30%)</ion-card-subtitle>
+      <ion-card-subtitle></ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content class="divider-content">
+      <p class="mt15" style="display: none;">Vaso</p>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="card-result">
+    <ion-card-content class="divider-content">
+      A recomendação é dividir em {{dividendo}} aplicações 
+      o volume de água informado ({{aplicacao}} ml por aplicação).
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
+<ion-footer translucent="true">
+  <ion-toolbar>
+
+    <ion-button type="button" color="primary" (click)="onCalcSave()">OK</ion-button>
+
+  </ion-toolbar>
+</ion-footer>

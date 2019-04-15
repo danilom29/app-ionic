@@ -8,7 +8,7 @@ import { OfflineManagerService } from './offline-manager.service';
 import { ToastController } from '@ionic/angular';
 
 const API_STORAGE_KEY = 'specialkey';
-const API_URL = "http://159.89.229.213:7000";
+const API_URL = "http://localhost:7000";
 
 @Injectable({
   providedIn: 'root'
@@ -76,8 +76,6 @@ export class ApiService {
   post = (route, params) => new Promise((resolve, reject) => {
     
     this.http.post(`${API_URL}/${route}`, params, this.options).subscribe((res: any) => {
-  
-      if (!res.message) this.toast( 'Operação realizada com sucesso.', 'success', 5000);
 
       resolve(res);
     

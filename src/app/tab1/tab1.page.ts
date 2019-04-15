@@ -5,6 +5,9 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { ValidateRequired } from '../validators/required.validator';
 import { ModalController } from '@ionic/angular';
 import { KcPage } from '../modal/kc/kc.page';
+import { VesselAreaPage } from '../modal/vessel-area/vessel-area.page';
+import { SystemEfficiencyPage } from '../modal/system-efficiency/system-efficiency.page';
+import { CalcResultPage } from '../modal/calc-result/calc-result.page';
 
 @Component({
   selector: 'app-tab1',
@@ -28,32 +31,20 @@ export class Tab1Page implements OnInit {
   public dividendo = 0;
   public aplicacao = 0;
   private kc;
+  public culturas: any;
+  public estagios: any;
+  public slideOpts = { effect: 'coverflow' };
   
   constructor(
     private authService: AuthenticationService,
     private api: ApiService,
     private modalController: ModalController
-  ) { }
-
-  // ngOnInit() {
-  // }
-
-  slideOpts = {
-    effect: 'coverflow'
-  };
-
-  next() {
-    this.slides.slideNext();
-  }
-
-  prev() {
-    this.slides.slidePrev();
-  }
+  ) { }  
 
   ngOnInit() {
 
     navigator.geolocation.getCurrentPosition(res => { console.log(res)
-      alert("Latitude: "+res.coords.latitude);
+      this.api.toast("Latitude: "+res.coords.latitude, 'light', 3000);
       this.calcForm.get('latitude').setValue(res.coords.latitude);
       this.radiacaoPorDia();
     });
@@ -75,8 +66,20 @@ export class Tab1Page implements OnInit {
     
   }
 
-  public culturas: any;
-  public estagios: any;
+  // FUNCOES
+  next() {
+    this.slides.slideNext();
+  }
+
+  prev() {
+    this.slides.slidePrev();
+  }
+
+  logout() {
+    this.authService.logout();
+  }
+
+  // MODAL
   
   async openDialogKc(){
     const modal = await this.modalController.create({
@@ -87,103 +90,55 @@ export class Tab1Page implements OnInit {
       }
     });
 
+    modal.onDidDismiss().then((result: any) => {
+      if(result.data){
+        this.calcForm.get('kc').setValue(result.data.kc);
+        this.calcForm.get('culture_id').setValue(result.data.cultura);
+        this.showKc = true;
+        this.kc = result.data.kc;
+      }
+    });
+
     return await modal.present();
-    // let dialogRef;
-    // dialogRef = this.dialog.open(DialogOverviewComponent, {
-    //   width: '290px',
-    //   height: '405px',
-    //   data: {
-    //     culturas: this.culturas,
-    //     estagios: this.estagios 
-    //   }
-    // });
-
-    // dialogRef.afterClosed().subscribe(result => { 
-    //   if(typeof result != "undefined"){
-    //     this.calcForm.get('kc').setValue(result.data);
-    //     this.calcForm.get('culture_id').setValue(result.cultura);
-    //     this.showKc = true;
-    //     this.kc = result.data;
-    //   }
-    // });
-
   }
 
-  openDialogArea = () => { 
-    // let dialogRef;
-    // dialogRef = this.dialog.open(DialogAreaComponent, {
-    //   width: '290px',
-    //   height: '250px'
-    // });
+  async openDialogArea(){    
+    const modal = await this.modalController.create({
+      component: VesselAreaPage
+    });
 
-    // dialogRef.afterClosed().subscribe(result => { 
-    //   if(typeof result != "undefined"){
-    //     this.calcForm.get('area').setValue(result.data);
-    //   }
-    // });
+    modal.onDidDismiss().then((result: any) => {
+      console.log(result);
+      if(result.data){
+        this.calcForm.get('area').setValue(result.data);
+      }
+    });
 
+    return await modal.present();
   }
 
-  openDialogEficiencia = () => { 
-    // let dialogRef;
-    // dialogRef = this.dialog.open(DialogAreaComponent, {
-    //   width: '290px',
-    //   height: '175px',
-    //   data: {flag: 1}
-    // });
+  async openDialogEficiencia(){
+    const modal = await this.modalController.create({
+      component: SystemEfficiencyPage
+    });
 
-    // dialogRef.afterClosed().subscribe(result => { 
-    //   if(typeof result != "undefined"){
-    //     this.calcForm.get('eficiencia').setValue(result.data);
-    //   }
-    // });
+    modal.onDidDismiss().then((result: any) => {
+      console.log(result);
+      if(result.data){
+        this.calcForm.get('eficiencia').setValue(result.data);
+      }
+    });
 
-  }
-
-  readDataCultura = () => {
-    this.api.get('culture').then(res => {     
-      this.culturas = res;
-    })
-  }
-
-  readDataEstagio = () => {
-    this.api.get('stages').then(res => {   
-      this.estagios = res;
-    })
-  }
-
-  onCalcSave = () => {
-    
-    let params = {
-      radiacao: this.ra,
-      tmax: this.calcForm.controls.tmax.value,
-      tmed: this.calcForm.controls.tmed.value,
-      tmin: this.calcForm.controls.tmin.value,
-      kc: this.calcForm.controls.kc.value,
-      area: this.calcForm.controls.area.value,
-      eficiencia: this.calcForm.controls.eficiencia.value,
-      etc: this.etc,
-      eto: this.et0,
-      litro_vaso: this.litro_vaso,
-      culture_id: this.calcForm.get('culture_id').value,
-      data_inclusao: this.dataAtualFormatada()
-    }
-
-    this.api.post('result', params)
-    .then(res => { }, rej => { });    
-  }
-
-  closeResult = () => {
-    
+    return await modal.present();
   }
   
-  onCalcFormSubmit = () => {
-    
+  async onCalcFormSubmit(){    
     this.ra = this.calcForm.controls['ra'].value;
     let tmedia = this.calcForm.controls['tmed'].value;
     let tmaxima = this.calcForm.controls['tmax'].value;
     let tminima = this.calcForm.controls['tmin'].value;
-    let base = Math.round(tmaxima-tminima); 
+    let base = Math.round(tmaxima-tminima);
+    // ------------------------------
     this.et0 = (0.0023*this.ra)*(Math.pow(base, 0.5))*(tmedia+17.8);
     this.et0 = parseFloat(this.et0.toFixed(2));
     this.etc = this.calcForm.controls['kc'].value*this.et0;
@@ -193,8 +148,38 @@ export class Tab1Page implements OnInit {
     this.dividendo = this.litro_vaso * 1000 >= 1000 ? 3 : 2;
     this.aplicacao = (this.litro_vaso * 1000) / this.dividendo;
     this.aplicacao = parseFloat(this.aplicacao.toFixed(2));
+
+    const modal = await this.modalController.create({
+      component: CalcResultPage,
+      componentProps: {
+        et0: this.et0,
+        etc: this.etc,
+        litro_vaso: this.litro_vaso,
+        dividendo: this.dividendo,
+        aplicacao: this.aplicacao,
+        ra: this.ra,
+        culture_id: this.calcForm.get('culture_id').value,
+        form: this.calcForm.value
+      }
+    });
+
+    modal.onDidDismiss().then((result: any) => {
+      this.calcForm.reset();
+    });
+
+    return await modal.present();
   }
 
+  //LISTS
+  readDataCultura = () => {
+    this.api.get('culture').then(res => { this.culturas = res; });
+  }
+
+  readDataEstagio = () => {
+    this.api.get('stages').then(res => { this.estagios = res; });
+  }
+
+  // CALCULO
   anguloHorario() { 
     let lat = this.calcForm.controls['latitude'].value;
     let tan = (Math.acos(((((-Math.tan((lat)*this.pi/180))*(Math.tan((-23.01163673)*this.pi/180))))+(-0.015707317/((0.985800348)*(Math.cos((-23.01163673)*this.pi/180))))))*180/this.pi);
@@ -238,8 +223,7 @@ export class Tab1Page implements OnInit {
     return indefinido;
   }
   
-  distanciaTerraSol(){
-    
+  distanciaTerraSol(){    
     let dia = this.dateDiferencaEmDias(); 
     let distancia = 1+0.033*Math.cos(2*this.pi/365*dia);
     return distancia;
@@ -332,50 +316,8 @@ export class Tab1Page implements OnInit {
       this.calcForm.controls['ra'].setValue(parseFloat(valorFinal.toFixed(2)));
 
     }else{
-      this.openDialog();
+      this.api.toast("Informe a LATITUDE, para continuar operação.", "danger", 5000);
     }
-  }
-
-  openDialog(): void {
-    // let dialogRef = this.dialog.open(DialogMessageComponent, {
-    //   width: '250px',
-    //   data: {msg: "Informe a LATITUDE, para continuar operação."}
-    // });
-
-    // dialogRef.afterClosed().subscribe(result => {
-    // });
-  }
-
-  dataAtualFormatada(){
-    let day;
-    let month;
-		let data = new Date();
-		let dia = data.getDate();
-		if (dia.toString().length == 1){
-      day = "0"+dia;
-    }else{
-      day = data.getDate();
-    }
-		  
-		var mes = data.getMonth()+1;
-		if (mes.toString().length == 1){
-      month = "0"+mes;
-    }else{
-      month = data.getMonth()+1;
-    }
-      
-		var ano = data.getFullYear();  
-		return ano+"-"+month+"-"+day;
-	}
-
-  logout() {
-    this.authService.logout();
-  }
-
-  get() {
-    this.api.getUsers(true).subscribe(r => {
-      console.log(r)
-    });
   }
 
 }
