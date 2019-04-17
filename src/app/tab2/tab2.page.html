@@ -1,9 +1,64 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      Tab Two
+      Resultados
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="clear()">Limpar</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content></ion-content>
+<ion-content>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button>
+      <ion-icon name="share"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button><ion-icon name="document" (click)="print('pdf')"></ion-icon></ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+
+  <ion-list>
+    <ion-item>
+      <ion-label class="label-custom" position="floating">
+        <ion-icon name="search"></ion-icon>Cultura
+      </ion-label>
+      <ionic-selectable #select 
+        [items]="arrCulture" 
+        itemValueField="id" 
+        itemTextField="descricao" 
+        [canSearch]="true" 
+        closeButtonText="Fechar" 
+        (onChange)="readData($event)">
+      </ionic-selectable>
+    </ion-item>
+
+
+
+    <ion-item *ngFor="let data of arr">
+      <ion-avatar slot="start">
+        <img src="../../assets/avatar.png">
+      </ion-avatar>
+      <ion-label>
+        <h2>{{data.data_inclusao}}</h2>
+        <div class="flex">
+          <div>
+
+            <h3>ETc: {{data.etc}}</h3>
+            <h3>ETo: {{data.eto}}</h3>
+
+          </div>
+          <div>
+
+            <h3>Resultado: {{data.resultado}} ml</h3>
+            <h3>30% ml: {{data.trinta}} ml</h3>
+
+          </div>
+        </div>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+</ion-content>

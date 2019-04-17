@@ -25,11 +25,7 @@ export class LoginPage implements OnInit {
   }
  
   login() {
-    this.authService.login(this.loginForm.value).then((res: any) => {
-      console.log(res);
-    }).catch((err: any) => {
-      console.log(err);
-    });
+    this.authService.login(this.loginForm.value).then((res: any) => { }).catch((err: any) => { });
   }
 
 }

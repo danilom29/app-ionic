@@ -18,6 +18,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { VesselAreaPage } from './modal/vessel-area/vessel-area.page';
 import { SystemEfficiencyPage } from './modal/system-efficiency/system-efficiency.page';
 import { CalcResultPage } from './modal/calc-result/calc-result.page';
+import { IonicSelectableModule } from 'ionic-selectable';
 
 @NgModule({
   declarations: [AppComponent, KcPage, VesselAreaPage, SystemEfficiencyPage, CalcResultPage],
@@ -29,7 +30,8 @@ import { CalcResultPage } from './modal/calc-result/calc-result.page';
     ReactiveFormsModule,
     TabsPageModule,
     IonicStorageModule.forRoot(),
-    HttpClientModule
+    HttpClientModule,
+    IonicSelectableModule
   ],
   providers: [
     StatusBar,

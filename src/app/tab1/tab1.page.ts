@@ -43,8 +43,8 @@ export class Tab1Page implements OnInit {
 
   ngOnInit() {
 
-    navigator.geolocation.getCurrentPosition(res => { console.log(res)
-      this.api.toast("Latitude: "+res.coords.latitude, 'light', 3000);
+    navigator.geolocation.getCurrentPosition(res => {
+      // this.api.toast("Latitude: "+res.coords.latitude, 'light', 3000);
       this.calcForm.get('latitude').setValue(res.coords.latitude);
       this.radiacaoPorDia();
     });
@@ -108,7 +108,6 @@ export class Tab1Page implements OnInit {
     });
 
     modal.onDidDismiss().then((result: any) => {
-      console.log(result);
       if(result.data){
         this.calcForm.get('area').setValue(result.data);
       }
@@ -123,7 +122,6 @@ export class Tab1Page implements OnInit {
     });
 
     modal.onDidDismiss().then((result: any) => {
-      console.log(result);
       if(result.data){
         this.calcForm.get('eficiencia').setValue(result.data);
       }

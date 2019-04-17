@@ -69,7 +69,7 @@ export class KcPage implements OnInit {
         kc: res.kc,
         cultura: res.id
       }
-      console.log("aqui", res)
+      
       this.modalController.dismiss(data);
       
     }); 

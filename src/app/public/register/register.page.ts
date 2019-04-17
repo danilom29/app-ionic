@@ -28,11 +28,7 @@ export class RegisterPage implements OnInit {
   }
 
   register(){
-    this.authService.post('users', this.userRegisterForm.value).then((res: any) => {
-      this.router.navigate(['login']);
-    }).catch((err: any) => {
-      console.log(err);
-    });
+    this.authService.post('users', this.userRegisterForm.value).then((res: any) => { this.router.navigate(['login']); }).catch((err: any) => { });
   }
 
 }

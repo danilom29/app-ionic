@@ -42,7 +42,7 @@ export class CalcResultPage implements OnInit {
       culture_id: this.culture_id,
       data_inclusao: this.dataAtualFormatada()
     }
-    console.log(params)
+    
     this.api.post('result', params) .then(res => { this.modalController.dismiss(true); }, rej => { });    
   }
 
