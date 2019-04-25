@@ -2,26 +2,29 @@
   <ion-toolbar>
     <ion-title>
       Resultados
-    </ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="clear()">Limpar</ion-button>
-    </ion-buttons>
+    </ion-title> 
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar [(ngModel)]="searchCulture" (ionInput)="filterItems($event)" placeholder="Cultura" debounce="500" clearIcon="close-circle">
+    </ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
 
+<ion-content fullscreen>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button>
-      <ion-icon name="share"></ion-icon>
+      <ion-icon name="ios-share"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="top">
-      <ion-fab-button><ion-icon name="document" (click)="print('pdf')"></ion-icon></ion-fab-button>
+      <ion-fab-button>
+        <ion-icon name="document" (click)="print('pdf')"></ion-icon>
+      </ion-fab-button>
     </ion-fab-list>
   </ion-fab>
 
   <ion-list>
-    <ion-item>
+    <!-- <ion-item>
       <ion-label class="label-custom" position="floating">
         <ion-icon name="search"></ion-icon>Cultura
       </ion-label>
@@ -33,16 +36,15 @@
         closeButtonText="Fechar" 
         (onChange)="readData($event)">
       </ionic-selectable>
-    </ion-item>
 
+    </ion-item> -->
 
-
-    <ion-item *ngFor="let data of arr">
+    <ion-item *ngFor="let data of jsonData">
       <ion-avatar slot="start">
         <img src="../../assets/avatar.png">
       </ion-avatar>
       <ion-label>
-        <h2>{{data.data_inclusao}}</h2>
+        <h2>{{data.cultura}} - {{data.data_inclusao}}</h2>
         <div class="flex">
           <div>
 

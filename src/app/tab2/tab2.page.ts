@@ -13,8 +13,10 @@ import { Storage } from '@ionic/storage';
 export class Tab2Page implements OnInit {
 
   public arr = [];
+  public jsonData = [];
   public arrCulture = [];
   public url: any = environment;
+  public searchCulture : any = "";
   @ViewChild('select') select;
 
   constructor(
@@ -37,15 +39,23 @@ export class Tab2Page implements OnInit {
 
   readData(param = null){
     let id = param ? param.value.id : 0;
-    this.api.get('resultados/' + id).then((res: any) => { this.arr = res; },rej =>{ })
+    this.api.get('resultados/' + id).then((res: any) => { this.arr = res; this.jsonData = res},rej =>{ })
   }
 
   readDataCulture = () => {
-    this.api.get('result/culturas').then((res: any) => { 
-      // let selector = {'id': 0, 'descricao': 'Selecione'}
+    this.api.get('result/culturas').then((res: any) => {
       this.arrCulture = res; 
     })
   }
+
+  filterItems(event){
+    
+    this.jsonData = this.arr.filter((item) => {
+      console.log(item.cultura.toLowerCase().includes(event.target.value))
+      return item.cultura.toLowerCase().includes(event.target.value);
+    });
+
+  }  
 
   print(type){
     // this.progress = true;
@@ -57,7 +67,7 @@ export class Tab2Page implements OnInit {
         tipoPDF: "report"
       }
       let param = {
-        data: this.arr,
+        data: this.jsonData,
         email: email,
         type: type,
         phantom: phantom

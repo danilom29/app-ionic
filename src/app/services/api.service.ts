@@ -86,6 +86,20 @@ export class ApiService {
       reject(rej);
     });
   })
+
+  put = (route, data) => new Promise((resolve, reject) => {
+    
+    this.http.patch(`${API_URL}/${route}`, data, this.options).subscribe(res => {
+
+      resolve(res);
+
+    }, rej => {
+
+      this.toast( 'Erro ao realizar operação.', 'danger', 5000);
+
+      reject(rej);
+    });
+  })
  
   // Save result of API requests
   private setLocalData(key, data) {
