@@ -1,0 +1,21 @@
+ion-item{
+    border: solid 1px #dedfe0;
+    border-radius: 3px;
+    // --highlight-height: 15px;
+}
+
+.item-avatar  {
+    display: block;
+    width: 30%;
+    text-align: center;
+    background-color: white;
+    border-radius: 46px;
+    top: 10px;
+    -webkit-margin-start: -28px;
+    left: 46%;
+    position: absolute;
+    margin-top: 30%;
+    box-shadow: inset 0 0 0em #989aa2, 0 0 0.5em #989aa2;
+    z-index: 2;
+}
+
