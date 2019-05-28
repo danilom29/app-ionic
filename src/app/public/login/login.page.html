@@ -1,56 +1,59 @@
 <ion-content padding>
-
-  <ion-fab vertical="top" horizontal="center" slot="fixed">
-    <!-- <img src="../../assets/new.png" style="width: 75%;"> -->
-  </ion-fab>
-  <form [formGroup]="loginForm" (ngSubmit)="login()">
-    <div class="item-avatar">
-      <img src="../../assets/new.png" style="width: 75%;">
-    </div>
-    <ion-card style="margin-top: 50%;">
-      <ion-card-header>
-        <!-- <ion-avatar class="item-avatar">
-            <img src="../../assets/new.png">
-        </ion-avatar> -->
-      </ion-card-header>
-
-      <ion-card-content>
-        <ion-list>
-
-          <ion-label color="primary" class="label-custom" position="fixed">
+  
+  <div class="vertical-center">
+    <form [formGroup]="loginForm" (ngSubmit)="login()">
+      <div class="item-avatar">
+        <img src="../../assets/new.png" style="width: 75%;">
+      </div>
+      <!-- <ion-card style="margin-top: -15%;">
+        <ion-card-header>
+          
+        </ion-card-header>
+  
+        <ion-card-content>
+        </ion-card-content>
+      </ion-card> -->
+      <ion-list>          
+        <ion-item no-padding lines="none" coolor="primary">
+          <ion-label color="primary" class="label-custom" position="floating">
             <ion-icon name="mail"></ion-icon>E-mail
           </ion-label>
-
-          <ion-item no-padding lines="none" coolor="primary">
-            <ion-input type="email" formControlName="email" autocomplete="off"></ion-input>
-          </ion-item>
-
-
-          <p *ngIf="loginForm.get('email').errors && loginForm.get('email').touched && !loginForm.get('email').value"
-            class="error">
-            {{loginForm.get('email').errors.message}}</p>
-
-
-          <p *ngIf="loginForm.get('email').errors && loginForm.get('email').touched && loginForm.get('email').value"
-            class="error">Email inválido.</p>
-
-          <ion-label color="primary" class="label-custom" position="fixed">
+          <ion-input no-padding type="email" formControlName="email" autocomplete="off"></ion-input>
+        </ion-item>
+        
+        
+        <p *ngIf="loginForm.get('email').errors && loginForm.get('email').touched && !loginForm.get('email').value"
+        class="error">
+        {{loginForm.get('email').errors.message}}</p>
+        
+        
+        <p *ngIf="loginForm.get('email').errors && loginForm.get('email').touched && loginForm.get('email').value"
+        class="error">Email inválido.</p>
+        
+        <ion-item no-padding lines="none" >
+          <ion-label color="primary" class="label-custom" position="floating">
             <ion-icon name="lock"></ion-icon>Senha
           </ion-label>
-          <ion-item no-padding lines="none" >
-            <ion-input type="password" formControlName="password" autocomplete="off"></ion-input>
-          </ion-item>
+          <ion-input no-padding type="password" formControlName="password" autocomplete="off"></ion-input>
+          <!-- <div style="width: 100%; text-align: right;">
+            
+          </div> -->
+        </ion-item>
 
-          <p *ngIf="loginForm.get('password').errors && loginForm.get('password').touched" class="error">
-            {{loginForm.get('password').errors.message}}</p>
+        <p *ngIf="loginForm.get('password').errors && loginForm.get('password').touched" class="error"> {{loginForm.get('password').errors.message}}</p>
 
-        </ion-list>
+        <ion-item no-padding lines="none" class="ion-text-end">
+          Esqueceu a senha?
+        </ion-item>
 
-        <ion-button type="submit" color="primary" size="small" expand="block" [disabled]="loginForm.invalid">Login</ion-button>
-        <ion-button expand="block" color="secondary" size="small" routerLink="/register" routerDirection="forward">Register
-        </ion-button>
-      </ion-card-content>
-    </ion-card>
+        <ion-button type="submit" color="primary" size="large" expand="full" class="mgt20" [disabled]="loginForm.invalid">Entrar</ion-button>
 
-  </form>
+        <div class="hrLine"><span>ou</span></div>
+
+        <div class="ion-text-center"> Não tem uma conta? <a routerLink="/register" routerDirection="forward">Cadastre-se</a> </div>
+
+      </ion-list>
+  
+    </form>
+  </div>
 </ion-content>
