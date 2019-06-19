@@ -10,9 +10,10 @@
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
 
-*{
-    font-size: 12px;
+.searchbar-input{
+    background-color: #dedede !important;
 }
+
 .error{
     margin: 3px 0px 0px 0px;
     color: red;
@@ -40,5 +41,29 @@
 
 .mgt20{
     margin-top: 20px;
+}
+
+.flex-column{
+    display: flex !important;
+    flex-direction: column;
+}
+
+.mgt40{
+    margin-top: 40px;
+}
+
+.pointer{
+    cursor: pointer;
+}
+
+.text-subtitle{
+    font-size: 12px !important;
+    margin-top: 1em;
+    color: #74767a !important;
+}
+
+.text-title{
+    font-size: 16px !important;
+    color: black !important;
 }
 

@@ -1,22 +1,25 @@
 <ion-header translucent="true">
+  
   <ion-toolbar>
-    <ion-title>Resultado</ion-title>
+    <ion-buttons slot="start">
+  
+      <ion-button (click)="dimissModal()" color="primary"><ion-icon name="close-circle-outline"></ion-icon></ion-button>
+  
+    </ion-buttons>
+
+    <ion-title style="text-align: center;">Resultado</ion-title>
+
+    <ion-buttons slot="end">
+  
+      <ion-button type="button" size="large" color="primary" (click)="onCalcSave()"><ion-icon name="checkmark-circle-outline"></ion-icon></ion-button>
+  
+    </ion-buttons>
+    
   </ion-toolbar>
+
 </ion-header>
 
-<ion-content>
-  <!-- <ion-card>
-    <ion-card-header>
-      <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
-      <ion-card-title>Card Title</ion-card-title>
-    </ion-card-header>
-
-    <ion-card-content>
-      Keep close to Nature's heart... and break clear away, once in awhile,
-      and climb a mountain or spend a week in the woods. Wash your spirit clean.
-    </ion-card-content>
-  </ion-card> -->
-
+<ion-content padding>
   <ion-card class="card-result">
     <ion-card-header>
       <ion-card-title>{{et0}} mm/dia</ion-card-title>
@@ -56,11 +59,3 @@
     </ion-card-content>
   </ion-card>
 </ion-content>
-
-<ion-footer translucent="true">
-  <ion-toolbar>
-
-    <ion-button type="button" color="primary" (click)="onCalcSave()">OK</ion-button>
-
-  </ion-toolbar>
-</ion-footer>

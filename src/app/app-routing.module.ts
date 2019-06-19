@@ -10,7 +10,8 @@ const routes: Routes = [
   { path: 'register', loadChildren: './public/register/register.module#RegisterPageModule' },
   { path: 'kc', loadChildren: './modal/kc/kc.module#KcPageModule' },  { path: 'vessel-area', loadChildren: './modal/vessel-area/vessel-area.module#VesselAreaPageModule' },
   { path: 'system-efficiency', loadChildren: './modal/system-efficiency/system-efficiency.module#SystemEfficiencyPageModule' },
-  { path: 'calc-result', loadChildren: './modal/calc-result/calc-result.module#CalcResultPageModule' }
+  { path: 'calc-result', loadChildren: './modal/calc-result/calc-result.module#CalcResultPageModule' },
+  { path: 'forgot-password', loadChildren: './public/forgot-password/forgot-password.module#ForgotPasswordPageModule' }
 
 ];
 @NgModule({

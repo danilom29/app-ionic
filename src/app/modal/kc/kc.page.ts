@@ -27,7 +27,7 @@ export class KcPage implements OnInit {
       'hideKc': new FormControl(),
       'umidade_maior_setenta': new FormControl(null, ValidateRequired),
       'kc': new FormControl(null, null),
-      'kc_value': new FormControl(null, null)
+      'kc_value': new FormControl(null)
     });
   }
 
@@ -44,9 +44,13 @@ export class KcPage implements OnInit {
     if(this.new){
       this.kcForm.controls['kc'].setValidators([ValidateRequired]);
       this.kcForm.controls['kc'].updateValueAndValidity();
+      // this.kcForm.controls['kc_value'].setValidators([]);
+      // this.kcForm.controls['kc_value'].updateValueAndValidity();
     }else{ 
       this.kcForm.controls['kc'].setValidators([]);
       this.kcForm.controls['kc'].updateValueAndValidity();
+      // this.kcForm.controls['kc_value'].setValidators([ValidateRequired]);
+      // this.kcForm.controls['kc_value'].updateValueAndValidity();
     }
   }
 
@@ -54,6 +58,7 @@ export class KcPage implements OnInit {
 
     this.api.post('kc/value', this.kcForm.value).then((res: any) => {
       this.dataKc = res;
+      console.log(res)
 
       if(this.dataKc.length > 0) return this.api.toast(res.message, 'success', 5000);
       

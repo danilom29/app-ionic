@@ -1,4 +1,31 @@
-.welcome-card ion-img {
-  max-height: 35vh;
-  overflow: hidden;
+ion-item{
+  border-radius: 2px;
 }
+
+ion-list{
+  --padding-top: 0;
+}
+
+.header-step{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background-color: #efefef;
+  color: #2e2c2c;
+  padding: 15px;
+}
+
+.header-subtitle{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 12px !important;
+}
+
+.header-btn{
+  text-transform: uppercase;
+  font-size: 10px;
+}
+

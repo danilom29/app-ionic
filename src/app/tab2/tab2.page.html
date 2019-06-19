@@ -1,8 +1,11 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>
+    <ion-title style="text-align: center">
       Resultados
     </ion-title> 
+    <ion-buttons slot="end" style="font-size: 25px">
+      <ion-icon name="log-out" (click)="logout()"></ion-icon>
+    </ion-buttons>
   </ion-toolbar>
   <ion-toolbar>
     <ion-searchbar [(ngModel)]="searchCulture" (ionInput)="filterItems($event)" placeholder="Cultura" debounce="500" clearIcon="close-circle">

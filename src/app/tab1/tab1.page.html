@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>
+    <ion-title style="text-align: center">
       Cálculo
     </ion-title>
     <ion-buttons slot="end" style="font-size: 25px">
@@ -12,91 +12,124 @@
 <ion-content fullscreen>
 
   <ion-slides [options]="slideOpts" #slides>
+    <!-- <h1>Slide 1</h1> -->
     <ion-slide style="flex-direction: column;">
+      <div class="header-step">
+        <div>
+          <ion-label>PASSO 1</ion-label>
+        </div>
+        <div class="header-subtitle">
+          <div><b>1</b> de <b>2</b></div>
+          <ion-button color="primary" shape="round" size="small" (click)="next()" class="header-btn"> Próximo </ion-button>
+        </div>
+      </div>
+      
+      <form [formGroup]="calcForm" style="width: 100% !important;">
+        <ion-list padding>
+          <ion-item no-padding lines="none">
+            <ion-label>
+              <ion-icon name="cloudy"></ion-icon>Temperatura Máxima
+            </ion-label>
+          </ion-item>
+          <ion-item no-padding lines="none" style="border: solid 1px #ccc">
+            <ion-input no-padding formControlName="tmax" type="number"></ion-input>
+            <!-- <button item-right>Forgot</button> -->
+          </ion-item>
 
-      <!-- <h1>Slide 1</h1> -->
-      <form [formGroup]="calcForm">
+          <ion-item no-padding lines="none">
+            <ion-label>
+              <ion-icon name="cloudy"></ion-icon>Temperatura Mínima
+            </ion-label>
+          </ion-item>
+          <ion-item no-padding lines="none" style="border: solid 1px #ccc">
+            <ion-input formControlName="tmin" type="number"></ion-input>
+          </ion-item>
 
-        <ion-item>
-          <ion-label class="label-custom" position="floating">
-            <ion-icon name="cloudy"></ion-icon>Temperatura Máxima
-          </ion-label>
-          <ion-input formControlName="tmax" type="number"></ion-input>
-        </ion-item>
+          <ion-item no-padding lines="none">
+            <ion-label>
+              <ion-icon name="cloudy"></ion-icon>Temperatura Média
+            </ion-label>
+          </ion-item>
+          <ion-item no-padding lines="none" style="border: solid 1px #ccc">
+            <ion-input formControlName="tmed" type="number"></ion-input>
+          </ion-item>
 
-        <ion-item>
-          <ion-label class="label-custom" position="floating">
-            <ion-icon name="cloudy"></ion-icon>Temperatura Mínima
-          </ion-label>
-          <ion-input formControlName="tmin" type="number"></ion-input>
-        </ion-item>
-
-        <ion-item>
-          <ion-label class="label-custom" position="floating">
-            <ion-icon name="cloudy"></ion-icon>Temperatura Média
-          </ion-label>
-          <ion-input formControlName="tmed" type="number"></ion-input>
-        </ion-item>
-
-        <ion-item>
-          <ion-label class="label-custom" position="floating">
-            <ion-icon name="locate"></ion-icon>Latitude
-          </ion-label>
-          <ion-input formControlName="latitude" type="number" (ionBlur)="radiacaoPorDia()"></ion-input>
-        </ion-item>
-        
+          <ion-item no-padding lines="none">
+            <ion-label>
+              <ion-icon name="locate"></ion-icon>Latitude
+            </ion-label>
+          </ion-item>
+          <ion-item no-padding lines="none" style="border: solid 1px #ccc">
+            <ion-input formControlName="latitude" type="number" (ionBlur)="radiacaoPorDia()"></ion-input>
+          </ion-item>
+        </ion-list>
       </form>
-
-      <ion-button (click)="next()" size="small">Proximo</ion-button>
-
     </ion-slide>
 
+    <!-- <h1>Slide 2</h1> -->
     <ion-slide style="flex-direction: column;">
+      <div class="header-step">
+        <div>
+          <ion-label>PASSO 2</ion-label>
+        </div>
+        <div class="header-subtitle">
+          <div><b>2</b> de <b>2</b></div>
+          <ion-button color="primary" shape="round" size="small" (click)="prev()" class="header-btn"> Anterior </ion-button>
+        </div>
+      </div>
+      
+      <form [formGroup]="calcForm" style="width: 100% !important;">          
+        <ion-list padding>
+          <ion-item no-padding lines="none" coolor="primary" style="display: none;">
+            <ion-input formControlName="ra" type="number"></ion-input>
+          </ion-item>
+  
+          <ion-item no-padding lines="none" coolor="primary" style="display: none;">
+            <ion-input formControlName="kc" type="number"></ion-input>
+          </ion-item>
+  
+          <ion-item no-padding lines="none" coolor="primary" style="display: none;">
+            <ion-input formControlName="culture_id" type="number"></ion-input>
+          </ion-item>
+  
+          <ion-item no-padding>
+            <ion-label class="flex-column">Informe o Kc <span class="text-subtitle"> <i>{{ kc ? 'Kc informado: ' + kc : '-' }}</i> </span></ion-label>
+            <ion-icon clear item-right name="information-circle" (click)="openDialogKc()"></ion-icon>
+          </ion-item>
 
-      <!-- <h1>Slide 2</h1> -->
+          <ion-item no-padding lines="none">
+            <ion-label>
+              <ion-icon name="crop"></ion-icon>Área do vaso(m²)
+            </ion-label>
+          </ion-item>
+          <ion-item no-padding lines="none" style="border: solid 1px #ccc">
+            <ion-input formControlName="area" type="number"></ion-input>
+            <ion-icon name="help-circle" clear item-right (click)="openDialogArea()"></ion-icon>
+          </ion-item>
 
-      <form [formGroup]="calcForm">
-
-        <ion-item style="display: none;">
-          <ion-input formControlName="ra" type="number"></ion-input>
-        </ion-item>
-
-        <ion-item style="display: none;">
-          <ion-input formControlName="kc" type="number"></ion-input>
-        </ion-item>
-
-        <ion-item style="display: none;">
-          <ion-input formControlName="culture_id" type="number"></ion-input>
-        </ion-item>
-
-        <ion-button type="button" size="small" color="light" (click)="openDialogKc()">Informe o Kc</ion-button>
-        <span *ngIf="kc">
-          Kc informado: <i>{{kc}}</i>
-        </span>
-
-        <ion-item>
-          <ion-label class="label-custom" position="floating">
-            <ion-icon name="crop"></ion-icon>Área do vaso(m²)
-          </ion-label>
-          <ion-input formControlName="area" type="number"></ion-input>
-          <ion-icon name="help-circle" (click)="openDialogArea()"></ion-icon>
-        </ion-item>
-
-        <ion-item>
-          <ion-label class="label-custom" position="floating">
-            <ion-icon name="flower"></ion-icon>Eficiência do Sistema
-          </ion-label>
-          <ion-input formControlName="eficiencia" type="number"></ion-input>
-          <ion-icon name="help-circle" (click)="openDialogEficiencia()"></ion-icon>
-        </ion-item>
+          <ion-item no-padding lines="none">
+            <ion-label>
+              <ion-icon name="flower"></ion-icon>Eficiência do Sistema
+            </ion-label>
+          </ion-item>
+          <ion-item no-padding lines="none" style="border: solid 1px #ccc">
+            <ion-input formControlName="eficiencia" type="number"></ion-input>
+            <ion-icon name="help-circle" clear item-right (click)="openDialogEficiencia()"></ion-icon>
+          </ion-item>
+          <ion-button type="button" expand="full" [disabled]="calcForm.invalid" (click)="onCalcFormSubmit()" class="mgt40">Calcular </ion-button>
+        </ion-list>
 
       </form>
-
-      <ion-button (click)="prev()" size="small" color="light">Anterior</ion-button>
 
     </ion-slide>
   </ion-slides>
 
-  <ion-button type="button" expand="block" [disabled]="calcForm.invalid" (click)="onCalcFormSubmit()">Calcular </ion-button>
+
+
+
+
+  <!-- -0 -->
+
+
 
 </ion-content>

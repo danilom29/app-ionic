@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ValidateRequired } from '../validators/required.validator';
 import { AuthenticationService } from '../services/authentication.service';
-import { Router } from '@angular/router';
 import { ApiService } from '../services/api.service';
 import { ValidateValueComparison } from '../validators/value-comparison.validator';
 
@@ -16,6 +15,7 @@ export class Tab3Page {
   public userRegisterForm: FormGroup;
 
   constructor(
+    private authService: AuthenticationService,
     private api: ApiService
   )
   {
@@ -28,7 +28,6 @@ export class Tab3Page {
 
     this.api.get('user')
     .then((res: any) => {
-      console.log(res); 
       this.userRegisterForm.patchValue(res);
     }, rej => { });
   }
@@ -45,6 +44,10 @@ export class Tab3Page {
     .then(res => { 
       this.api.toast("Dados atualizados.", "success", 2000);
     }, rej => { });
+  }
+
+  logout() {
+    this.authService.logout();
   }
 
 }

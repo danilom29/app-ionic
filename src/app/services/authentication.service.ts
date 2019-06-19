@@ -61,7 +61,7 @@ export class AuthenticationService {
     
     this.http.post(`${API_URL}/${route}`, params, this.options).subscribe((res: any) => {
   
-      this.toast( 'Operação realizada com sucesso.', 'success', 5000);
+      if (route != 'users/email') this.toast( 'Operação realizada com sucesso.', 'success', 5000);
 
       resolve(res);
     

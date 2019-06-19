@@ -28,4 +28,8 @@ export class SystemEfficiencyPage implements OnInit {
     this.modalController.dismiss(this.eficienciaForm.get('eficiencia').value);
   }
 
+  dimissModal(){
+    this.modalController.dismiss();
+  }
+
 }

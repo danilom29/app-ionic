@@ -27,7 +27,6 @@ export class Tab2Page implements OnInit {
   ){}
 
   ngOnInit(): void {
-    console.log('tab2')
     this.readData();
     this.readDataCulture();
   }
@@ -35,6 +34,10 @@ export class Tab2Page implements OnInit {
   clear(){
     this.select.value = null;
     this.readData();
+  }
+
+  logout() {
+    this.authService.logout();
   }
 
   readData(param = null){
@@ -51,7 +54,6 @@ export class Tab2Page implements OnInit {
   filterItems(event){
     
     this.jsonData = this.arr.filter((item) => {
-      console.log(item.cultura.toLowerCase().includes(event.target.value))
       return item.cultura.toLowerCase().includes(event.target.value);
     });
 

@@ -1,8 +1,17 @@
 <ion-header translucent="true">
   <ion-toolbar>
-    <ion-title>Eficiência Irrigação Localizada</ion-title>
+    <ion-buttons slot="start">
+        
+      <ion-button (click)="dimissModal()" color="primary"><ion-icon name="arrow-round-back"></ion-icon></ion-button>
+
+    </ion-buttons>
+
+    <ion-title style="text-align: center">Eficiência Irrigação Localizada</ion-title>
+
     <ion-buttons slot="end">
-      <ion-button (click)="dimissModal()">Fechar</ion-button>
+
+      <ion-button type="button" size="large" color="primary" (click)="setarEficiencia()" [disabled]="eficienciaForm.invalid"><ion-icon name="checkmark-circle-outline"></ion-icon></ion-button>
+
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -11,16 +20,18 @@
 
   <form [formGroup]="eficienciaForm">
 
-    <ion-list>
+    <ion-list padding>
       <ion-radio-group formControlName="eficiencia">
-        <ion-list-header>
-          <ion-label>KC</ion-label>
-        </ion-list-header>
 
-        <ion-item *ngFor="let data of dataEficiencia">
-          <ion-label>{{data.value}}</ion-label>
-          <ion-radio slot="start" [value]="data.value"></ion-radio>
-        </ion-item>
+        <div *ngFor="let data of dataEficiencia">
+
+          <ion-label>Eficiência</ion-label>
+          <ion-item no-padding>
+            <ion-label class="text-subtitle">{{data.value}}</ion-label>
+            <ion-radio slot="end" [value]="data.value"></ion-radio>
+          </ion-item>
+
+        </div>
 
       </ion-radio-group>
     </ion-list>
@@ -28,14 +39,3 @@
   </form>
 
 </ion-content>
-
-<ion-footer translucent="true">
-  <ion-toolbar>
-
-    <ion-buttons slot="end">
-      <ion-button type="button" size="small" color="primary" (click)="dimissModal()">Cancelar</ion-button>
-      <ion-button type="button" size="small" color="primary" (click)="setarEficiencia()" [disabled]="eficienciaForm.invalid">Selecionar</ion-button>
-    </ion-buttons>
-
-  </ion-toolbar>
-</ion-footer>

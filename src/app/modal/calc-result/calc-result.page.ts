@@ -26,6 +26,10 @@ export class CalcResultPage implements OnInit {
   ngOnInit() {
   }
 
+  dimissModal(){
+    this.modalController.dismiss();
+  }
+
   onCalcSave = () => {
     
     let params = {
