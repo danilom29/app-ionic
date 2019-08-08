@@ -1,13 +1,13 @@
-import { Platform, ToastController } from '@ionic/angular';
+import { Platform, ToastController, AlertController } from '@ionic/angular';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { BehaviorSubject } from 'rxjs';
-import { tap, map, catchError } from "rxjs/operators";
+import { NetworkService, ConnectionStatus } from './network.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
-const TOKEN_KEY = 'auth-token';
-const API_STORAGE_KEY = 'specialkey';
-const API_URL = "http://localhost:7000";
+const TOKEN_KEY = 'auth-token'; 
+const API_URL = environment.url;
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +24,8 @@ export class AuthenticationService {
   constructor(
     private storage: Storage,
     private http: HttpClient,  
-    private toastController: ToastController,
+    public alertController: AlertController,
+    private networkService: NetworkService, 
     private plt: Platform
   ) { 
     this.plt.ready().then(() => {
@@ -42,35 +43,62 @@ export class AuthenticationService {
  
   login = (params) => new Promise((resolve, reject) => {
     
-    this.http.post(`${API_URL}/token`, params).subscribe((res: any) => {
+    if (this.networkService.getCurrentNetworkStatus() == ConnectionStatus.Offline) {
       
-      this.storage.set('email', params.email);
-  
-      this.storage.set(TOKEN_KEY, 'JWT ' + res.token).then(() => {
-        this.authenticationState.next(true);
-      });
-  
-      resolve(res);
+      this.presentAlert( 'Erro ao tentar se conectar com a internet.', 'Atenção!');
+      reject();
+      
+    } else {
+
+      this.http.post(`${API_URL}/token`, params).subscribe((res: any) => {
+        
+        this.storage.set('email', params.email);
     
-    }, rej => {
-      reject(rej);
-    });
+        this.storage.set(TOKEN_KEY, 'JWT ' + res.token).then(() => {
+          this.authenticationState.next(true);
+        });
+    
+        resolve({
+          ...res,
+          message: 'Login realizado com sucesso.'
+        });
+      
+      }, rej => {
+        reject(rej);
+      });
+
+    }
   })
 
   post = (route, params) => new Promise((resolve, reject) => {
     
-    this.http.post(`${API_URL}/${route}`, params, this.options).subscribe((res: any) => {
-  
-      if (route != 'users/email') this.toast( 'Operação realizada com sucesso.', 'success', 5000);
+    if (this.networkService.getCurrentNetworkStatus() == ConnectionStatus.Offline) {
+      
+      reject({
+        message: 'Erro ao tentar se conectar com a internet.'
+      });
 
-      resolve(res);
+    } else {
+
+      this.http.post(`${API_URL}/${route}`, params, this.options).subscribe((res: any) => {
     
-    }, rej => {
+        if (route != 'users/email') this.presentAlert( 'Operação realizada com sucesso.', 'Sucesso!');
+  
+        resolve({
+          ...res,
+          message: 'Operação realizada com sucesso.'
+        });
+      
+      }, rej => {
+  
+        reject({
+          ...rej,
+          message: 'Erro ao realizar operação.'
+        });
 
-      this.toast( 'Erro ao realizar operação.', 'danger', 5000);
-
-      reject(rej);
-    });
+      });
+    
+    }
   })
  
   logout() {
@@ -83,14 +111,16 @@ export class AuthenticationService {
     return this.authenticationState.value;
   }
 
-  toast(msg, color, duration){
-    let toast = this.toastController.create({
+  async presentAlert(msg, header){
+
+    const alert = await this.alertController.create({
+      header: header,
+      subHeader: '',
       message: msg,
-      duration: duration,
-      position: 'bottom',
-      color: color
+      buttons: ['OK']
     });
-    toast.then(toast => toast.present());
+
+    await alert.present();
   }
 
 }

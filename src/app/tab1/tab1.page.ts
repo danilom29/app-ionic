@@ -36,19 +36,10 @@ export class Tab1Page implements OnInit {
   public slideOpts = { effect: 'coverflow' };
   
   constructor(
-    private authService: AuthenticationService,
     private api: ApiService,
+    private authService: AuthenticationService,
     private modalController: ModalController
-  ) { }  
-
-  ngOnInit() {
-
-    navigator.geolocation.getCurrentPosition(res => {
-      // this.api.toast("Latitude: "+res.coords.latitude, 'light', 3000);
-      this.calcForm.get('latitude').setValue(res.coords.latitude);
-      this.radiacaoPorDia();
-    });
-
+  ) {
     this.calcForm = new FormGroup({
       'tmax': new FormControl(null, ValidateRequired),
       'tmin': new FormControl(null, ValidateRequired),
@@ -60,10 +51,19 @@ export class Tab1Page implements OnInit {
       'area': new FormControl(null, ValidateRequired),
       'eficiencia': new FormControl(null, ValidateRequired)
     });
+   }  
+
+  ngOnInit() {   
+  }
+  
+  ionViewWillEnter() {
+    navigator.geolocation.getCurrentPosition(res => {
+      this.calcForm.get('latitude').setValue(res.coords.latitude);
+      this.radiacaoPorDia();
+    });
 
     this.readDataCultura();
     this.readDataEstagio();
-    
   }
 
   // FUNCOES
@@ -79,8 +79,7 @@ export class Tab1Page implements OnInit {
     this.authService.logout();
   }
 
-  // MODAL
-  
+  // MODAL  
   async openDialogKc(){
     const modal = await this.modalController.create({
       component: KcPage,
@@ -314,7 +313,7 @@ export class Tab1Page implements OnInit {
       this.calcForm.controls['ra'].setValue(parseFloat(valorFinal.toFixed(2)));
 
     }else{
-      this.api.toast("Informe a LATITUDE, para continuar operação.", "danger", 5000);
+      this.api.presentAlert("Informe a LATITUDE, para continuar operação.", "Atenção!");
     }
   }
 

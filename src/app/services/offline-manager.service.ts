@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ToastController } from '@ionic/angular';
 import { Observable, from, of, forkJoin } from 'rxjs';
 import { switchMap, finalize } from 'rxjs/operators';
@@ -19,7 +19,6 @@ interface StoredRequest {
   providedIn: 'root'
 })
 export class OfflineManagerService {
-
   
   constructor(private storage: Storage, private http: HttpClient, private toastController: ToastController) { }
  
@@ -27,11 +26,11 @@ export class OfflineManagerService {
     return from(this.storage.get(STORAGE_REQ_KEY)).pipe(
       switchMap((storedOperations: any) => {
         let storedObj = JSON.parse(storedOperations);
-        if (storedObj && storedObj.length > 0) {
+        if (storedObj && storedObj.length > 0) { 
           return this.sendRequests(storedObj).pipe(
             finalize(() => {
               let toast = this.toastController.create({
-                message: `Local data succesfully synced to API!`,
+                message: `Dados locais sincronizados com sucesso com a API!`,
                 duration: 3000,
                 position: 'bottom'
               });
@@ -41,7 +40,7 @@ export class OfflineManagerService {
             })
           );
         } else {
-          console.log('no local events to sync');
+          // console.log('no local events to sync');
           return of(false);
         }
       })
@@ -50,7 +49,7 @@ export class OfflineManagerService {
  
   storeRequest(url, type, data) {
     let toast = this.toastController.create({
-      message: `Your data is stored locally because you seem to be offline.`,
+      message: `Seus dados são armazenados localmente porque você parece estar off-line.`,
       duration: 3000,
       position: 'bottom'
     });
@@ -82,8 +81,14 @@ export class OfflineManagerService {
     let obs = [];
  
     for (let op of operations) {
-      console.log('Make one request: ', op);
-      let oneObs = this.http.request(op.type, op.url, op.data);
+      // console.log('Make one request: ', this.options);
+      let oneObs = this.http.request(op.type, op.url, {
+        body:op.data,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MX0.S1Cg_Ilvjkhb5e0YIUFwWvhtIeqkdjhmDx9IBKMf5qg'
+        }
+      });
       obs.push(oneObs);
     }
  

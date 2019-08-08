@@ -4,6 +4,7 @@ import { ApiService } from '../services/api.service';
 import { ModalController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { Storage } from '@ionic/storage';
+import { LoadingService } from '../services/loading.service';
 
 @Component({
   selector: 'app-tab2',
@@ -23,12 +24,19 @@ export class Tab2Page implements OnInit {
     private authService: AuthenticationService,
     private api: ApiService,
     private storage: Storage,
-    private modalController: ModalController
+    private modalController: ModalController,
+    public loading: LoadingService
   ){}
 
   ngOnInit(): void {
-    this.readData();
-    this.readDataCulture();
+    this.loading.present();
+  }
+  
+  ionViewWillEnter() {
+    this.readDataCulture().then((res: any) => {
+      this.arrCulture = res; 
+      this.readData();
+    });
   }
 
   clear(){
@@ -42,13 +50,16 @@ export class Tab2Page implements OnInit {
 
   readData(param = null){
     let id = param ? param.value.id : 0;
-    this.api.get('resultados/' + id).then((res: any) => { this.arr = res; this.jsonData = res},rej =>{ })
+    this.api.get('resultados/' + id).then((res: any) => {
+      this.arr = res; this.jsonData = res;
+      this.loading.dismiss();
+    }).catch((err: any) => {
+      this.loading.dismiss();
+    })
   }
 
   readDataCulture = () => {
-    this.api.get('result/culturas').then((res: any) => {
-      this.arrCulture = res; 
-    })
+    return this.api.get('result/culturas');
   }
 
   filterItems(event){
@@ -60,7 +71,7 @@ export class Tab2Page implements OnInit {
   }  
 
   print(type){
-    // this.progress = true;
+    this.loading.present();
     this.storage.get('email').then(email => {
       let rotaInterna = this.url.rotaInterna;
       let phantom = {
@@ -75,12 +86,14 @@ export class Tab2Page implements OnInit {
         phantom: phantom
       }
       
-      this.api.post('result/report', param).then((res: any) => {
-        // this.progress = false;
-        if(res.ret) return this.api.toast("Relatório enviado ao e-mail cadastrado.", 'success', 3000);
+      this.api.report('result/report', param).then((res: any) => {
+        this.loading.dismiss();
+        if(res.ret) return this.api.presentAlert("Relatório enviado ao e-mail cadastrado.", 'Sucesso!');
         
-        this.api.toast("Erro ao realizar operação.", 'danger', 3000);   
+        this.api.presentAlert(res.message, 'Atenção!');   
         
+      }).catch(err => {
+        this.loading.dismiss();
       });
     })
   }

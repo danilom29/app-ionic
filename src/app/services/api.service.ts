@@ -2,102 +2,155 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NetworkService, ConnectionStatus } from './network.service';
 import { Storage } from '@ionic/storage';
-import { Observable, from } from 'rxjs';
-import { tap, map, catchError } from "rxjs/operators";
+import { from } from 'rxjs';
 import { OfflineManagerService } from './offline-manager.service';
-import { ToastController } from '@ionic/angular';
+import { ToastController, AlertController } from '@ionic/angular';
+import { environment } from 'src/environments/environment';
 
 const API_STORAGE_KEY = 'specialkey';
-const API_URL = "http://localhost:7000";
+const API_URL = environment.url;
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  
-  public options = {
-    'headers': new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': 'JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MX0.S1Cg_Ilvjkhb5e0YIUFwWvhtIeqkdjhmDx9IBKMf5qg'
-    })
-  }
 
   constructor(
     private http: HttpClient, 
     private networkService: NetworkService, 
     private storage: Storage, 
     private toastController: ToastController,
-    private offlineManager: OfflineManagerService
+    private offlineManager: OfflineManagerService,
+    public alertController: AlertController
   ) { }
- 
-  getUsers(forceRefresh: boolean = false): Observable<any[]> {
-    if (this.networkService.getCurrentNetworkStatus() == ConnectionStatus.Offline || !forceRefresh) {
-      // Return the cached data from Storage
-      return from(this.getLocalData('users'));
-    } else {
-      // Return real API data and store it locally
-      return this.http.get(`${API_URL}/user`, this.options).pipe(
-        map((res: any) => res),
-        tap(res => {
-          this.setLocalData('users', res);
-        })
-      )
-    }
-  }
- 
-  updateUser(user, data): Observable<any> {
-    let url = `${API_URL}/users/${user}`;
-    if (this.networkService.getCurrentNetworkStatus() == ConnectionStatus.Offline) {
-      return from(this.offlineManager.storeRequest(url, 'PUT', data));
-    } else {
-      return this.http.put(url, data).pipe(
-        catchError(err => {
-          this.offlineManager.storeRequest(url, 'PUT', data);
-          throw new Error(err);
-        })
-      );
-    }
-  }
 
-  get = (route) => new Promise((resolve, reject) => {
+  get = (route) => new Promise((resolve, reject) => {    
+    this.storage.get('auth-token').then(res => {     
+      let headers =  new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': res
+      });
+      
+      if (this.networkService.getCurrentNetworkStatus() == ConnectionStatus.Offline) {
+  
+        from(this.getLocalData(route)).subscribe(res =>{
+          resolve(res);
+        });
+  
+      } else {
+        
+        this.http.get(`${API_URL}/${route}`, {headers: headers}).subscribe((res: any) => {
+          
+          this.setLocalData(route, res);
+          resolve(res);
+        
+        }, rej => {
     
-    this.http.get(`${API_URL}/${route}`, this.options).subscribe((res: any) => {
-
-      resolve(res);
+          this.toast( 'Erro ao realizar operação.', 'Erro!', 3000);
     
-    }, rej => {
+          reject(rej);
+        });
+      }
 
-      this.toast( 'Erro ao realizar operação.', 'danger', 5000);
-
-      reject(rej);
     });
   })
 
   post = (route, params) => new Promise((resolve, reject) => {
+    this.storage.get('auth-token').then(res => {     
+      let headers =  new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': res
+      });
+
+      if (this.networkService.getCurrentNetworkStatus() == ConnectionStatus.Offline) {
+        
+        from(this.offlineManager.storeRequest(`${API_URL}/${route}`, 'POST', params)).subscribe(res => {
+          
+          resolve(res);
+  
+        });
+  
+      }else{
+  
+        this.http.post(`${API_URL}/${route}`, params, {headers: headers}).subscribe((res: any) => {
     
-    this.http.post(`${API_URL}/${route}`, params, this.options).subscribe((res: any) => {
-
-      resolve(res);
+          resolve(res);
+        
+        }, rej => {
     
-    }, rej => {
-
-      this.toast( 'Erro ao realizar operação.', 'danger', 5000);
-
-      reject(rej);
+          this.presentAlert( 'Erro ao realizar operação.', 'Erro!');
+    
+          reject(rej);
+        });
+  
+      }
     });
   })
 
   put = (route, data) => new Promise((resolve, reject) => {
+    this.storage.get('auth-token').then(res => {     
+      let headers =  new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': res
+      });
+
+      if (this.networkService.getCurrentNetworkStatus() == ConnectionStatus.Offline) {
+  
+        from(this.offlineManager.storeRequest(`${API_URL}/${route}`, 'PATCH', data));
+        reject();
+  
+      } else {
+  
+        this.http.patch(`${API_URL}/${route}`, data, {headers: headers}).subscribe(res => {
     
-    this.http.patch(`${API_URL}/${route}`, data, this.options).subscribe(res => {
+          resolve(res);
+    
+        }, rej => {
+    
+          this.presentAlert( 'Erro ao realizar operação.', 'Erro!');
+    
+          reject(rej);
+        });
+      
+      }
+    });
+  })
 
-      resolve(res);
+  report = (route, params) => new Promise((resolve, reject) => {
+    this.storage.get('auth-token').then(res => {     
+      let headers =  new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': res
+      });
 
-    }, rej => {
-
-      this.toast( 'Erro ao realizar operação.', 'danger', 5000);
-
-      reject(rej);
+      if (this.networkService.getCurrentNetworkStatus() == ConnectionStatus.Offline) {
+        
+        from(this.offlineManager.storeRequest(`${API_URL}/${route}?Authorization=JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MX0.S1Cg_Ilvjkhb5e0YIUFwWvhtIeqkdjhmDx9IBKMf5qg`, 'POST', params)).subscribe(res => {
+          
+          resolve({
+            ret: false,
+            message: "Erro ao tentar se conectar com a internet."
+          });
+  
+        });
+  
+      }else{
+  
+        this.http.post(`${API_URL}/${route}`, params, {headers: headers}).subscribe((res: any) => {
+    
+          resolve({
+            ...res,
+            message: 'Erro ao realizar operação.'
+          });
+        
+        }, rej => {
+    
+          this.presentAlert( 'Erro ao realizar operação.', 'Erro!');
+    
+          reject(rej);
+        });
+  
+      }
     });
   })
  
@@ -119,6 +172,18 @@ export class ApiService {
       color: color
     });
     toast.then(toast => toast.present());
+  }
+
+  async presentAlert(msg, header){
+
+    const alert = await this.alertController.create({
+      header: header,
+      subHeader: '',
+      message: msg,
+      buttons: ['OK']
+    });
+
+    await alert.present();
   }
 
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { ValidateRequired } from 'src/app/validators/required.validator';
+import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,8 @@ export class LoginPage implements OnInit {
   public loginForm: FormGroup;
   constructor(
     private formBuilder: FormBuilder,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    public loading: LoadingService
   ) { 
     this.loginForm = this.formBuilder.group({
       email: ['', [ValidateRequired, Validators.email]],
@@ -25,7 +27,13 @@ export class LoginPage implements OnInit {
   }
  
   login() {
-    this.authService.login(this.loginForm.value).then((res: any) => { }).catch((err: any) => { });
+    this.loading.present();
+    this.authService.login(this.loginForm.value).then((res: any) => { 
+      this.loading.dismiss();
+    }).catch((err: any) => { 
+      this.loading.dismiss();
+      this.authService.presentAlert( err.message, 'Erro!');
+    });
   }
 
 }

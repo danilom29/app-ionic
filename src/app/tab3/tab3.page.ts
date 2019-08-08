@@ -4,6 +4,7 @@ import { ValidateRequired } from '../validators/required.validator';
 import { AuthenticationService } from '../services/authentication.service';
 import { ApiService } from '../services/api.service';
 import { ValidateValueComparison } from '../validators/value-comparison.validator';
+import { LoadingService } from '../services/loading.service';
 
 @Component({
   selector: 'app-tab3',
@@ -16,7 +17,8 @@ export class Tab3Page {
 
   constructor(
     private authService: AuthenticationService,
-    private api: ApiService
+    private api: ApiService,
+    public loading: LoadingService
   )
   {
     this.userRegisterForm = new FormGroup({
@@ -28,8 +30,12 @@ export class Tab3Page {
 
     this.api.get('user')
     .then((res: any) => {
+
       this.userRegisterForm.patchValue(res);
-    }, rej => { });
+
+    }).catch(err => {
+
+    });
   }
 
   ngOnInit() {
@@ -39,11 +45,14 @@ export class Tab3Page {
 
   register(){
     delete this.userRegisterForm.value.repeatpassword;
-
+    this.loading.present();
     this.api.put('user', this.userRegisterForm.value)
     .then(res => { 
-      this.api.toast("Dados atualizados.", "success", 2000);
-    }, rej => { });
+      this.loading.dismiss();
+      this.api.presentAlert('Dados atualizados.', 'Sucesso!');
+    }).catch(err => {
+      this.loading.dismiss();
+    });
   }
 
   logout() {

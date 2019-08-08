@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ValidateRequired } from 'src/app/validators/required.validator';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { Router } from '@angular/router';
+import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
   selector: 'app-register',
@@ -15,7 +16,8 @@ export class RegisterPage implements OnInit {
 
   constructor(
     private authService: AuthenticationService,
-    private router: Router
+    private router: Router,
+    public loading: LoadingService
   ) { 
     this.userRegisterForm = new FormGroup({
       'name': new FormControl(null, [ValidateRequired]),
@@ -28,7 +30,14 @@ export class RegisterPage implements OnInit {
   }
 
   register(){
-    this.authService.post('users', this.userRegisterForm.value).then((res: any) => { this.router.navigate(['login']); }).catch((err: any) => { });
+    this.loading.present();
+    this.authService.post('users', this.userRegisterForm.value).then((res: any) => { 
+      this.loading.dismiss();
+      this.router.navigate(['login']); 
+    }).catch((err: any) => { 
+      this.loading.dismiss();
+      this.authService.presentAlert( err.message, 'Erro!');
+    });
   }
 
 }

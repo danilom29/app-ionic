@@ -3,6 +3,7 @@ import { ModalController } from '@ionic/angular';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ValidateRequired } from 'src/app/validators/required.validator';
 import { ApiService } from 'src/app/services/api.service';
+import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
   selector: 'app-kc',
@@ -19,7 +20,8 @@ export class KcPage implements OnInit {
 
   constructor(
     private modalController: ModalController,
-    private api: ApiService
+    private api: ApiService,
+    public loading: LoadingService
   ) { 
     this.kcForm = new FormGroup({
       'culture_id': new FormControl(null, ValidateRequired),
@@ -44,32 +46,31 @@ export class KcPage implements OnInit {
     if(this.new){
       this.kcForm.controls['kc'].setValidators([ValidateRequired]);
       this.kcForm.controls['kc'].updateValueAndValidity();
-      // this.kcForm.controls['kc_value'].setValidators([]);
-      // this.kcForm.controls['kc_value'].updateValueAndValidity();
     }else{ 
       this.kcForm.controls['kc'].setValidators([]);
       this.kcForm.controls['kc'].updateValueAndValidity();
-      // this.kcForm.controls['kc_value'].setValidators([ValidateRequired]);
-      // this.kcForm.controls['kc_value'].updateValueAndValidity();
     }
   }
 
   readDataValueKc(){
-
+    this.loading.present();
     this.api.post('kc/value', this.kcForm.value).then((res: any) => {
       this.dataKc = res;
-      console.log(res)
-
-      if(this.dataKc.length > 0) return this.api.toast(res.message, 'success', 5000);
+      this.loading.dismiss();
+      if(this.dataKc.length > 0) return this.api.presentAlert(res.message, 'Sucesso!');
       
-      return this.api.toast('Nenhum resultado encontrado', 'warning', 5000);
+      return this.api.presentAlert('Nenhum resultado encontrado', 'Atenção!');
+
+    }).catch(err => {
+      this.loading.dismiss();
     });
   }
 
   createKc(){
+    this.loading.present();
     this.api.post('kc', this.kcForm.value).then((res: any) => {
-
-      this.api.toast(res.message, 'success', 5000);
+      this.loading.dismiss();
+      this.api.presentAlert(res.message, 'Sucesso!');
       let data =  {
         kc: res.kc,
         cultura: res.id
@@ -77,6 +78,8 @@ export class KcPage implements OnInit {
       
       this.modalController.dismiss(data);
       
+    }).catch(err => {
+      this.loading.dismiss();
     }); 
   }
 

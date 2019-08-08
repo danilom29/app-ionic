@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  url: 'http://localhost:5000',
+  url: 'http://174.138.14.56:7000',
   rotaInterna: "http://localhost:1001"
 };
 
